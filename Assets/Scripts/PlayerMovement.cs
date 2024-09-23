@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float speed;
     Rigidbody rb;
     private Vector2 input;
-
+    bool isHidden = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnSneak() //sneak button
     {
+        isHidden = true;
+
         speed = speed / 2; //halves the set speed to simulate slow movement like the player is sneaking
 
         Debug.Log("Sneaking");
@@ -57,8 +59,28 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnStand() //stand button
     {
+        isHidden = false;
+
         speed = speed * 2; //multiplies speed by 2 to simulate the character 'standing up' back to normal speed
 
         Debug.Log("Standing");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!isHidden) //checking if the player is sneaking or not
+        {
+            Debug.Log("You have been detected!");
+        }
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!isHidden)
+        {
+            Debug.Log("You are now hidden");
+        }
+        
     }
 }
