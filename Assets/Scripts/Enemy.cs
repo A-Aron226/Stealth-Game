@@ -8,7 +8,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform target;
+    [SerializeField] LayerMask environment; //checks for a certain layer
 
+    bool wall;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,23 @@ public class Enemy : MonoBehaviour
 
         float dot = Vector3.Dot(directionToTarget, forwardDirection); //dot product is a decimal of the range from 1 (front) to 0 (sides) to -1 (back)
 
-        if (dot > 0.5f)
+        WallCheck();
+
+        if (!WallCheck())
+        {
+            if (dot > 0.5f)
+            {
+                Debug.Log("Player Detected!");
+            }
+
+            if (dot < -0.5f)
+            {
+                Debug.Log("Lost sight of Player");
+            }
+
+        }
+
+        /*if (dot > 0.5f)
         {
             Debug.Log("Player Detected!");
         }
@@ -32,8 +50,24 @@ public class Enemy : MonoBehaviour
         if (dot < -0.5f)
         {
             Debug.Log("Lost sight of Player");
+        }*/
+        
+
+        // transform.TransformDirection(Vector3.forward)
+        //Debug.Log(dot);
+    }
+
+    bool WallCheck()
+    {
+
+        bool check = false;
+
+        if (Physics.Raycast(transform.position, (target.transform.position - transform.position), environment))
+        {
+            Debug.Log("Wall");
+            check = true;
         }
 
-        //Debug.Log(dot);
+        return check;
     }
 }
