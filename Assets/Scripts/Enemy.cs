@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     int waypointIndex;
     Vector3 destination;
 
-    bool wall;
+    bool wall = false;
 
     // Start is called before the first frame update
     void Start()
@@ -49,16 +49,18 @@ public class Enemy : MonoBehaviour
 
         float dot = Vector3.Dot(directionToTarget, forwardDirection); //dot product is a decimal of the range from 1 (front) to 0 (sides) to -1 (back)
 
-        if (!WallCheck())
+        if (WallCheck())
         {
             if (dot > 0.5f)
             {
                 Debug.Log("Player Detected!");
+                state = GuardStates.Pursue;
             }
 
             if (dot < -0.5f)
             {
                 Debug.Log("Lost sight of Player");
+                state = GuardStates.Patrol;
             }
 
         }
@@ -79,24 +81,44 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-      //rb.velocity = transform.forward * speed;
+        
+        //rb.velocity = transform.forward * speed;
     }
 
     bool WallCheck()
     {
 
-        
+        wall = Physics.CheckCapsule(transform.position, transform.forward, environment);
 
-        if (Physics.Raycast(transform.position, (target.transform.position - transform.position), environment))
+        if (wall)
         {
-            Debug.Log("Wall");
-            wall = true;
+            UpdatePatrol();
         }
 
-        else if ((Physics.Raycast(transform.position, (target.transform.position - transform.position), Player)))
-        {
-            wall = false;
-        }
+
+        /*aycastHit ray = Physics.Raycast(transform.position, target.transform.position - transform.position);
+
+
+
+           if (ray.collider != null)
+           {
+               wall = ray.collider.CompareTag("Player");
+
+               if(wall)
+               {
+                   Debug.DrawRay(transform.position, (target.transform.position - transform.position), Color.magenta); //If it can see player
+               }
+
+               else
+               {
+                   Debug.DrawRay(transform.position, (target.transform.position - transform.position), Color.red); //if it cannot see player
+               }
+           }*/
+
+        /*  else if ((Physics.Raycast(transform.position, (target.transform.position - transform.position), Player)))
+            {
+                wall = false;
+            } */
 
         return wall;
     }
@@ -126,7 +148,8 @@ public class Enemy : MonoBehaviour
 
     void UpdatePursue()
     {
-
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+        //agent.SetDestination(target.transform.position);
     }
 
 
