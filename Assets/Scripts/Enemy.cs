@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,6 +32,9 @@ public class Enemy : MonoBehaviour
 
     bool wall = false;
 
+    [SerializeField]List<GameObject> points;
+    private Vector3 tempHold;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,16 +56,18 @@ public class Enemy : MonoBehaviour
 
         if (WallCheck())
         {
-            if (dot > 0.5f)
+            if (dot > 0.7f)
             {
                 Debug.Log("Player Detected!");
                 state = GuardStates.Pursue;
             }
 
-            if (dot < -0.5f)
+            if (dot < -0.4f)
             {
                 Debug.Log("Lost sight of Player");
-                state = GuardStates.Patrol;
+                state = GuardStates.Investigate;
+
+                StartCoroutine(secDelay());
             }
 
         }
@@ -128,7 +135,7 @@ public class Enemy : MonoBehaviour
         destination = waypoints[waypointIndex].position;
         agent.SetDestination(destination);
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(2);
     }
 
     public void UpdatePatrol()
@@ -143,7 +150,17 @@ public class Enemy : MonoBehaviour
 
     public void UpdateInves()
     {
+        tempHold = this.GetComponent<NavMeshAgent>().destination;
 
+        AddInvesPoint();
+
+        agent.SetDestination(tempHold); //Moves AI towards last known Location
+    }
+
+    IEnumerator secDelay() //A timer to switch back to patrol state
+    {
+        yield return new WaitForSeconds(7);
+        state = GuardStates.Patrol;
     }
 
     public void UpdatePursue()
@@ -168,5 +185,11 @@ public class Enemy : MonoBehaviour
         {
             waypointIndex = 0; //goes back to first waypoint once it has reached the maximum length of waypoints
         }
+    }
+
+    void AddInvesPoint() //Adds gameobject from where Player was last seen
+    {
+        points.Add(new GameObject());
+        points[points.Count - 1].transform.position = tempHold;
     }
 }
