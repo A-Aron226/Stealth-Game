@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float speed;
     Rigidbody rb;
     private Vector2 input;
-    bool isHidden = false;
+    public bool isHidden = false;
     // Start is called before the first frame update
     void Start()
     {

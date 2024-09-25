@@ -775,7 +775,7 @@ GameObject:
   - component: {fileID: 1208285649}
   - component: {fileID: 1208285648}
   - component: {fileID: 1208285647}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GuardEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1018,12 +1018,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa4bd1790c781e04a9bbb10b044eb75d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movement: {fileID: 1426207276}
   agent: {fileID: 1355231889}
   target: {fileID: 1426207274}
-  environment:
-    serializedVersion: 2
-    m_Bits: 128
-  Player:
+  player:
     serializedVersion: 2
     m_Bits: 8
   speed: 5
@@ -1034,7 +1032,8 @@ MonoBehaviour:
   - {fileID: 1180922205}
   - {fileID: 592878905}
   - {fileID: 2026907974}
-  points: []
+  points:
+  - {fileID: 0}
 --- !u!54 &1355231895
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1174,6 +1173,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3581344522378820132, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
   m_PrefabInstance: {fileID: 8340676614616088555}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1426207276 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4338114452217063246, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
+  m_PrefabInstance: {fileID: 8340676614616088555}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac95ac1e0358f14cb5f40ba4eda6d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1816074009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,7 +1227,7 @@ GameObject:
   - component: {fileID: 1854306320}
   - component: {fileID: 1854306319}
   - component: {fileID: 1854306318}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SoundTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1412,7 +1422,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 179
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -1557,7 +1567,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3581344522378820132, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.85
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 3581344522378820132, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1565,7 +1575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3581344522378820132, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.66
+      value: 6.23
       objectReference: {fileID: 0}
     - target: {fileID: 3581344522378820132, guid: e9897e829cfc53e478df1029a1a91a39, type: 3}
       propertyPath: m_LocalRotation.w

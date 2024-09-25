@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,11 +16,11 @@ public enum GuardStates
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] PlayerMovement movement;
 
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Transform target;
-    [SerializeField] LayerMask environment; //checks for a certain layer
-    [SerializeField] LayerMask Player;
+    [SerializeField] LayerMask player; //checks for a certain layer
     [SerializeField] float speed;
 
     GuardStates state = GuardStates.Patrol;
@@ -30,7 +31,7 @@ public class Enemy : MonoBehaviour
     int waypointIndex;
     Vector3 destination;
 
-    bool wall = false;
+    bool inSight = false;
 
     [SerializeField]List<GameObject> points;
     private Vector3 tempHold;
@@ -54,22 +55,25 @@ public class Enemy : MonoBehaviour
 
         float dot = Vector3.Dot(directionToTarget, forwardDirection); //dot product is a decimal of the range from 1 (front) to 0 (sides) to -1 (back)
 
-        if (WallCheck())
+        if (SightCheck())
         {
             if (dot > 0.7f)
             {
-                Debug.Log("Player Detected!");
+                //Debug.Log("Player Detected!");
                 state = GuardStates.Pursue;
             }
 
             if (dot < -0.4f)
             {
-                Debug.Log("Lost sight of Player");
-                state = GuardStates.Investigate;
-
-                StartCoroutine(secDelay());
+                //Debug.Log("Lost sight of Player");
+                inSight = false;
+                state = GuardStates.Patrol;
             }
+        }
 
+        if (movement.isHidden == true)
+        {
+            state = GuardStates.Investigate;
         }
 
         switch (state)
@@ -86,48 +90,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        
-        //rb.velocity = transform.forward * speed;
-    }
-
-    bool WallCheck()
+    bool SightCheck()
     {
 
-        wall = Physics.CheckCapsule(transform.position, transform.forward, environment);
+        inSight = Physics.CheckCapsule(transform.position, transform.forward, player);
 
-        if (wall)
+        if (!inSight)
         {
-            UpdatePatrol();
+            state = GuardStates.Patrol;
         }
 
-
-        /*aycastHit ray = Physics.Raycast(transform.position, target.transform.position - transform.position);
-
-
-
-           if (ray.collider != null)
-           {
-               wall = ray.collider.CompareTag("Player");
-
-               if(wall)
-               {
-                   Debug.DrawRay(transform.position, (target.transform.position - transform.position), Color.magenta); //If it can see player
-               }
-
-               else
-               {
-                   Debug.DrawRay(transform.position, (target.transform.position - transform.position), Color.red); //if it cannot see player
-               }
-           }*/
-
-        /*  else if ((Physics.Raycast(transform.position, (target.transform.position - transform.position), Player)))
-            {
-                wall = false;
-            } */
-
-        return wall;
+        return inSight;
     }
 
     IEnumerator WaitToMove() //Coroutine
@@ -154,19 +127,12 @@ public class Enemy : MonoBehaviour
 
         AddInvesPoint();
 
-        agent.SetDestination(tempHold); //Moves AI towards last known Location
-    }
-
-    IEnumerator secDelay() //A timer to switch back to patrol state
-    {
-        yield return new WaitForSeconds(7);
-        state = GuardStates.Patrol;
+        UpdatePatrol();
     }
 
     public void UpdatePursue()
     {
         transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-        //agent.SetDestination(target.transform.position);
     }
 
 
