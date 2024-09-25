@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //Enemy state;
-
     [SerializeField] float speed;
     Rigidbody rb;
     private Vector2 input;
@@ -75,7 +73,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("You have been detected!");
             Application.LoadLevel(0); //Will restart the game since the player would have been caught at that point.
-            //state.UpdatePursue();
         }
         
     }
@@ -85,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
         if (!isHidden)
         {
             Debug.Log("You are now hidden");
-            //state.UpdatePatrol();
         }
         
     }
