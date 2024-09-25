@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal.Filters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //Enemy state;
+
     [SerializeField] float speed;
     Rigidbody rb;
     private Vector2 input;
@@ -68,9 +71,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isHidden) //checking if the player is sneaking or not
+        if (!isHidden) //checking if the player is sneaking or not. If Plyaer enters the trigger, the enemy will detect player they will automatically be caught
         {
             Debug.Log("You have been detected!");
+            Application.LoadLevel(0); //Will restart the game since the player would have been caught at that point.
+            //state.UpdatePursue();
         }
         
     }
@@ -80,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isHidden)
         {
             Debug.Log("You are now hidden");
+            //state.UpdatePatrol();
         }
         
     }

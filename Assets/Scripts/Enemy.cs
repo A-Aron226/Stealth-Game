@@ -131,7 +131,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
     }
 
-    void UpdatePatrol()
+    public void UpdatePatrol()
     {
         if (Vector3.Distance(transform.position, destination) < 1)
         {
@@ -141,12 +141,12 @@ public class Enemy : MonoBehaviour
         
     }
 
-    void UpdateInves()
+    public void UpdateInves()
     {
 
     }
 
-    void UpdatePursue()
+    public void UpdatePursue()
     {
         transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
         //agent.SetDestination(target.transform.position);
